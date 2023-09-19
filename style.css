@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 380px;
+}
+
+.game-title {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.main-field {
+  width: 350px;
+}
+.header {
+  border-bottom: 2px solid black;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.word-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  row-gap: 10px;
+  column-gap: 5px;
+}
+
+.letter-box {
+  width: 55px;
+  height: 55px;
+  border: 2px solid rgb(162, 161, 161);
+  margin: 7px;
+}
