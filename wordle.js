@@ -33,11 +33,13 @@ const getWordOfDay = async () => {
 };
 
 /**
+ * Useless function just to try out POST I guess, solution realy don't need it
  * @async
  * @param {string} word
  * @returns {boolean} is answer correct
  */
 const checkWord = async (word) => {
+  loaderEl.classList.add(LOADING_CLASS);
   const res = await fetch("https://words.dev-apis.com/validate-word", {
     method: "POST",
     body: `{
@@ -51,6 +53,7 @@ const checkWord = async (word) => {
     console.log("Error while parsing response", e);
   }
 
+  loaderEl.classList.remove(LOADING_CLASS);
   return data.validWord || false;
 };
 
@@ -115,7 +118,7 @@ document.addEventListener("keypress", async (e) => {
     }
     updateView(currentLine, rowsEl, currentLineIndex);
   } else if (inputString === "enter" && currentLine.length === 5) {
-    checkWord(currentLine.join(""));
+    await checkWord(currentLine.join(""));
     colorBoxes(currentLine, wordOfDay, rowsEl, currentLineIndex);
     currentLine = [];
     const maxLineIndex = rowsEl.length;
