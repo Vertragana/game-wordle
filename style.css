@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  background-color: darkslateblue;
 }
 
 body {
@@ -32,4 +33,23 @@ body {
   height: 55px;
   border: 2px solid rgb(162, 161, 161);
   margin: 7px;
+  text-align: center;
+  font-size: xx-large;
+}
+
+.loader {
+  opacity: 0;
+  font-weight: bolder;
+}
+
+.loader.loading {
+  opacity: 1;
+}
+
+.correct {
+  color: green;
+}
+
+.inword {
+  color: yellow;
 }
