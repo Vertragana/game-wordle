@@ -1,4 +1,11 @@
-const letterBox = document.querySelector(".letter-box");
+const letterBox = Array.from(document.querySelectorAll(".letter-box"));
+const firstWord = Array.from(document.querySelectorAll(".first-word"));
+
+
+document.addEventListener("keydown", function(){
+  
+  console.log(firstWord.length);
+})
 
 
 
