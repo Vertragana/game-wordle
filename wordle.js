@@ -9,7 +9,7 @@ let wordOfDay = new Map();
 /**
  * Fetches word of a day and returns it
  * @async
- * @returns {Map<string, number>} Map char to index
+ * @returns {Promise<Map<string, number>>} Map char to index
  */
 const getWordOfDay = async () => {
   const res = await fetch("https://words.dev-apis.com/word-of-the-day", {
@@ -36,7 +36,7 @@ const getWordOfDay = async () => {
  * Useless function just to try out POST I guess, solution realy don't need it
  * @async
  * @param {string} word
- * @returns {boolean} is answer correct
+ * @returns {Promise<boolean>} is answer correct
  */
 const checkWord = async (word) => {
   loaderEl.classList.add(LOADING_CLASS);
@@ -66,8 +66,8 @@ const checkWord = async (word) => {
  */
 const updateView = (currentLine, rows, currentLineIndex) => {
   const letterBoxEls = rows[currentLineIndex].querySelectorAll(".letter-box");
-  currentLine.forEach((letter, i) => {
-    letterBoxEls[i].innerText = letter;
+  letterBoxEls.forEach((box, i) => {
+    box.innerText = currentLine[i] || "";
   });
 };
 
@@ -102,13 +102,39 @@ function isLetter(letter) {
   return /^[a-zA-Z]$/.test(letter); // проверка является ли  стринга словом или нет
 }
 
+/**
+ * Flash boxes red if input is not a word
+ *
+ * @param {HTMLElement[]} rows
+ * @param {number} currentLineIndex
+ */
+const flashError = (rows, currentLineIndex) => {
+  const letterBoxEls = rows[currentLineIndex].querySelectorAll(".letter-box");
+  letterBoxEls.forEach((el) => {
+    el.classList.add("invalid");
+  });
+};
+
+/**
+ * Remove item and update view
+ *
+ * @param {string[]} currentLine - current input
+ * @param {HTMLElement[]} rowsEl
+ * @param {number} currentLineIndex
+ */
+const removeItem = (currentLine, rowsEl, currentLineIndex) => {
+  currentLine.pop();
+  console.log(currentLine);
+  updateView(currentLine, rowsEl, currentLineIndex);
+};
+
 window.addEventListener("load", async () => {
   loaderEl.classList.add(LOADING_CLASS);
   wordOfDay = await getWordOfDay();
   loaderEl.classList.remove(LOADING_CLASS);
 });
 
-document.addEventListener("keypress", async (e) => {
+document.addEventListener("keydown", async (e) => {
   const inputString = e.key.toLowerCase();
   if (isLetter(inputString)) {
     if (currentLine.length == 5) {
@@ -118,11 +144,17 @@ document.addEventListener("keypress", async (e) => {
     }
     updateView(currentLine, rowsEl, currentLineIndex);
   } else if (inputString === "enter" && currentLine.length === 5) {
-    await checkWord(currentLine.join(""));
-    colorBoxes(currentLine, wordOfDay, rowsEl, currentLineIndex);
-    currentLine = [];
-    const maxLineIndex = rowsEl.length;
-    currentLineIndex =
-      currentLineIndex < maxLineIndex ? currentLineIndex + 1 : maxLineIndex;
+    const isValidWord = await checkWord(currentLine.join(""));
+    if (!isValidWord) {
+      flashError(rowsEl, currentLineIndex);
+    } else {
+      colorBoxes(currentLine, wordOfDay, rowsEl, currentLineIndex);
+      currentLine = [];
+      const maxLineIndex = rowsEl.length;
+      currentLineIndex =
+        currentLineIndex < maxLineIndex ? currentLineIndex + 1 : maxLineIndex;
+    }
+  } else if (inputString === "backspace") {
+    removeItem(currentLine, rowsEl, currentLineIndex);
   }
 });
