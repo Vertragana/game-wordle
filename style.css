@@ -13,11 +13,29 @@ body {
 .main-field {
   width: 350px;
 }
+
+.spiral {
+  font-size: 40px;
+  animation: spin 1.5s linear infinite;
+}
+
+/* rotates clockwise indefinitely */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.info-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .header {
   border-bottom: 2px solid black;
   padding: 10px;
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 0px;
 }
 
 .word-row {
@@ -32,4 +50,10 @@ body {
   height: 55px;
   border: 2px solid rgb(162, 161, 161);
   margin: 7px;
+  text-transform: uppercase;
+  font-size: bold;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
